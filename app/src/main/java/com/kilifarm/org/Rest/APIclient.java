@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIclient {
 
-    public static final String BASE_URL="http://192.168.1.110:8082/";
+    public static final String BASE_URL="http://192.168.0.192:8082/";
     private static Retrofit retrofit=null;
 
 
@@ -22,7 +22,6 @@ public class APIclient {
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
-
         return retrofit;
     }
 }
