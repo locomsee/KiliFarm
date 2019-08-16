@@ -1,5 +1,6 @@
 package com.kilifarm.org.Authentication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,12 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.kilifarm.org.Async.Test;
+import com.kilifarm.org.MainActivity;
 import com.kilifarm.org.Models.Registration;
 import com.kilifarm.org.R;
 import com.kilifarm.org.Rest.APIclient;
@@ -32,6 +36,8 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText Email;
     EditText Password;
     EditText ConfPass;
+
+    Button register;
 
     ProgressBar progressBar;
 
@@ -54,15 +60,28 @@ public class RegistrationActivity extends AppCompatActivity {
         Email=(EditText)findViewById(R.id.editTextEmail);
         Password=(EditText)findViewById(R.id.editTextPass);
         ConfPass=(EditText)findViewById(R.id.editTextConfPass);
+        register=(Button)findViewById(R.id.btRegister);
 
         progressBar=(ProgressBar)findViewById(R.id.regbar);
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         rl=findViewById(R.id.rlayout);
         anim= AnimationUtils.loadAnimation(this,R.anim.uptodowndiagonal);
         rl.setAnimation(anim);
 
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                validateFields();
+
+            }
+        });
+
+
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -123,39 +142,35 @@ public class RegistrationActivity extends AppCompatActivity {
 
             Registration register=new Registration(valFirst,valLast,valPhone,valEmail,valPass);
             sendInfo(register);
-
         }
 
     }
-    public void procData(View view){
-        validateFields();
-    }
-
+//    public void procData(View view){
+//        validateFields();
+//    }
     public void sendInfo(Registration register){
         final String TAG = "RegistrationActivity";
 
             final KilifarmEndpoints apiservice= APIclient.getClient().create(KilifarmEndpoints.class);
         Call<Registration> call=apiservice.reg(register);
-        try {
-            call.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
+           new Test().execute();
+
 
         call.enqueue(new Callback<Registration>() {
             @Override
             public void onResponse(Call<Registration> call, Response<Registration> response) {
-                Registration tl = response.body();
-                String test="null";
-                Log.e(TAG, "onResponse: " + tl.getMessage());
-               // if(!test.equals(tl.getMessage())){
-                    Toast.makeText(RegistrationActivity.this,"registered ",Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
-               /// }else {
+              int test = response.code();
 
-                    Toast.makeText(RegistrationActivity.this, "registered " + tl.getMessage(), Toast.LENGTH_LONG).show();
+                if(test==200){
                     progressBar.setVisibility(View.GONE);
-              //  }
+                    Toast.makeText(RegistrationActivity.this,"User registered succesfully",Toast.LENGTH_LONG).show();
+                    Intent i=new Intent(RegistrationActivity.this, MainActivity.class);
+                    startActivity(i);
+                }else if(test==400){
+                    Toast.makeText(RegistrationActivity.this,"User Already Exists",Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override

@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Registration {
 
-    @SerializedName("first_name")
+    @SerializedName("firstname")
     private String first_name;
-    @SerializedName("last_name")
+    @SerializedName("lastname")
     private String last_name;
     @SerializedName("phone")
     private String phone;
@@ -16,9 +16,12 @@ public class Registration {
    @SerializedName("password")
     private String password;
 
-   @SerializedName("error")
+   @SerializedName("message")
    @Expose
    private String message;
+
+
+
 
     public String getMessage() {
         return message;
