@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
-        <activity android:name=".Dashboard.Dashboard"></activity>
+        <activity android:name=".Category"></activity>
+        <activity android:name=".Dashboard.Dashboard" />
         <activity android:name=".Authentication.RegistrationActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
